@@ -17,14 +17,24 @@ static int curses_init( lua_State *L )
 	keypad( stdscr, TRUE );
 	curs_set( 0 );
 
+#ifndef __WIN32
 	use_default_colors();
+#endif
+	
 	start_color();
 
 	int i;
+#ifndef __WIN32
 	for( i = 0; i < 8; i++ )
 	{
 		init_pair( i, i, -1 );
 	}
+#else
+	for( i = 0; i < 8; i++ )
+	{
+		init_pair( i, i, 0 );
+	}
+#endif
 
 	curses_running = 1;
 

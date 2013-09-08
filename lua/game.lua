@@ -57,6 +57,7 @@ function game.init()
 	game.globalTurns = 0
 	game.playerTurns = 0
 
+	ui.centerCameraOnPlayer()
 end
 
 function game.loop()

@@ -1,2 +1,6 @@
-Noapte
+noapte
 log.txt
+*.exe
+*.dll
+*.swp
+
