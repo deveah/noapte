@@ -1,0 +1,28 @@
+
+	Noapte TODO list
+	--
+
+	* screen minimum requirements
+
+	* action point consumption
+		* different tiles have different moving cost
+
+	* inventory system
+
+	* in-game messages, such as "Bump!" etc.
+
+	* option to deactivate logging?
+		in real-world applications, it uses a fcukton of space
+
+	* somehow separate movement from melee attack?
+
+	* camera movement
+
+	* real, useful map generator
+	
+	* sight
+	
+	* combat:
+		* natural attacks, ie. "claws" or "kick"
+		* tool-based attacks
+	
