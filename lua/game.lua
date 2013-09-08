@@ -4,6 +4,7 @@ require "lua/map"
 require "lua/mapgen"
 require "lua/entity"
 require "lua/util"
+require "lua/sight"
 require "lua/ui"
 require "lua/log"
 require "lua/settings"
@@ -12,6 +13,8 @@ game = {}
 
 game.defaultMapWidth = 100
 game.defaultMapHeight = 40
+
+game.sightRadius = 10
 
 function game.init()
 	-- init tables that hold general game data
@@ -39,6 +42,7 @@ function game.init()
 	game.player.map = m
 	game.player.x = 10
 	game.player.y = 10
+	sight.initMap( game.player )
 	log.file:write( "[init] Generated the player: " .. tostring( game.player )
 		.. "\n" )
 

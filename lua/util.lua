@@ -27,3 +27,11 @@ function contains( tbl, value )
 	return false
 end
 
+function dist( x1, y1, x2, y2 )
+	assert( type( x1 ) == "number" )
+	assert( type( x2 ) == "number" )
+	assert( type( y1 ) == "number" )
+	assert( type( y2 ) == "number" )
+
+	return math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) )
+end

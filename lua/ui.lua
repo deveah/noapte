@@ -12,11 +12,15 @@ function ui.init()
 end
 
 function ui.terminate()
+	curses.clear()
+	curses.refresh()
 	curses.terminate()
 end
 
 function ui.drawMainScreen()
 	ui.updateCamera()
+
+	sight.updateFOV( game.player, game.sightRadius )
 
 	for i = 0, ui.cols - 1 do
 		for j = 0, ui.rows - 1 do
@@ -25,25 +29,27 @@ function ui.drawMainScreen()
 
 			if map.isLegal( game.player.map, ax, ay ) then
 				local e = entity.findByPosition( game.player.map, ax, ay )
-				if e and e.active then
+				if e and e.active and game.player.sightMap[ax][ay] == sight.lit then
 					curses.attr( e.color )
 					curses.write( i, j, e.face )
 				else
-					curses.attr( game.player.map.terrain[ax][ay].color )
-					curses.write( i, j, game.player.map.terrain[ax][ay].face )
+					if game.player.sightMap[ax][ay] == sight.lit then
+						curses.attr( game.player.map.terrain[ax][ay].color )
+						curses.write( i, j, game.player.map.terrain[ax][ay].face )
+					elseif game.player.sightMap[ax][ay] == sight.seen then
+						curses.attr( curses.blue )
+						curses.write( i, j, game.player.map.terrain[ax][ay].face )
+					else
+						curses.write( i, j, " " )
+					end
 				end
 			else
 				curses.write( i, j, " " )
 			end
 		end
 	end
-end
 
-function ui.isOnScreen( x, y )
-	assert( type( x ) == "number" )
-	assert( type( y ) == "number" )
-	
-	return x >= 0 and y >= 0 and x < ui.cols and y < ui.rows
+	curses.refresh()
 end
 
 function ui.updateCamera()
