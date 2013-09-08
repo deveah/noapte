@@ -2,10 +2,20 @@
 log = {}
 
 function log.init()
-	--log.file = io.open( "log-" .. os.date( "%d-%m-%y-%H-%M-%S" ), "w" )
-	log.file = io.open( "log.txt", "w" )
-	assert( log.file )
-	log.file:write( "==\n" )
+	if misc.logging then
+		log.file = io.open( "log.txt", "w" )
+		assert( log.file )
+		log.file:write( "==\n" )
+	else
+		-- hackety-hack-hack
+		log.file = {}
+		function log.file:write( string )
+			return true
+		end
+		function log.file:close()
+			return true
+		end
+	end
 end
 
 function log.terminate()

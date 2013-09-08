@@ -11,9 +11,6 @@
 
 	* in-game messages, such as "Bump!" etc.
 
-	* option to deactivate logging?
-		in real-world applications, it uses a fcukton of space
-
 	* somehow separate movement from melee attack?
 
 	* real, useful map generator
