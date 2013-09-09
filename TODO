@@ -2,6 +2,8 @@
 	Noapte TODO list
 	--
 
+	* dungeon memory separated from player's lightmap
+
 	* screen minimum requirements
 
 	* action point consumption

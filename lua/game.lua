@@ -130,6 +130,22 @@ function game.handleKey( k )
 		return entity.moveRelative( game.player, 1, 0 )
 	end
 
+	if contains( keymap.northwest, k ) then
+		return entity.moveRelative( game.player, -1, -1 )
+	end
+
+	if contains( keymap.northeast, k ) then
+		return entity.moveRelative( game.player, 1, -1 )
+	end
+
+	if contains( keymap.southwest, k ) then
+		return entity.moveRelative( game.player, -1, 1 )
+	end
+
+	if contains( keymap.southeast, k ) then
+		return entity.moveRelative( game.player, 1, 1 )
+	end
+
 	return false
 end
 
