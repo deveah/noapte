@@ -23,7 +23,7 @@ function ui.drawMainScreen()
 	sight.updateFOV( game.player, game.sightRadius )
 
 	for i = 0, ui.cols - 1 do
-		for j = 0, ui.rows - 1 do
+		for j = 1, ui.rows - 3 do
 			local ax = i + ui.camera.x - math.floor( ui.cols/2 )
 			local ay = j + ui.camera.y - math.floor( ui.rows/2 )
 
@@ -48,6 +48,36 @@ function ui.drawMainScreen()
 			end
 		end
 	end
+
+	curses.attr( curses.white )
+
+	-- hack to clear the message line
+	for i = 0, ui.cols - 1 do
+		curses.write( i, 0, " " )
+	end
+
+	local currentMessages = {}
+	for i = 1, #message.list do
+		if not contains( message.list[i].flags, "read" ) then
+			table.insert( currentMessages, message.list[i].msg )
+			table.insert( message.list[i].flags, "read" )
+		end
+	end
+
+	local msgLine = ""
+	for i = 1, #currentMessages do
+		if string.len( msgLine ) + string.len( currentMessages[i] ) < ui.cols - 1 then
+			msgLine = msgLine .. currentMessages[i] .. " "
+		else
+			-- TODO: unhandled if message line exceeds screen width!
+		end
+	end
+
+	curses.write( 0, 0, msgLine )
+
+	local infoString = string.format( "%s (%i/%i)", game.player.name,
+		game.player.hp, game.player.maxHp )
+	curses.write( 0, ui.rows-2, infoString )
 
 	curses.refresh()
 end

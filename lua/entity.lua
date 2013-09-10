@@ -66,7 +66,9 @@ function entity.act( e )
 				game.playerTurns = game.playerTurns + 1
 			end
 		else
-			e.ap = e.ap - 10
+			if entity.dumbAI( e ) then
+				e.ap = e.ap - 10
+			end
 		end
 	end
 
@@ -94,18 +96,31 @@ function entity.moveRelative( e, x, y )
 				log.file:write( "[moveRelative] Entity " .. tostring( e ) ..
 					" has tried to attack entity " .. tostring( ee ) .. "\n" )
 			
-				if e == game.player then
+				--[[if e == game.player then
+					message.push( "You attack " .. ee.name .. "." )
 					entity.die( ee )
-				end
+				end]]--
+				message.push( e.name .. " attacks " .. ee.name .. "." )
+				entity.die( ee )
 			end
 		else
 			log.file:write( "[moveRelative] Entity " .. tostring( e ) ..
 				" bumped into terrain at " .. e.x+x .. "," .. e.y+y .. "\n" )
+
+			if e == game.player then
+				message.push( "Bump!" )
+			end
+
 			return false
 		end
 	else
 		log.file:write( "[moveRelative] Entity " .. tostring( e ) ..
 			" tried an illegal move at " .. e.x+x .. "," .. e.y+y .. "\n" )
+
+		if e == game.player then
+			message.push( "Nuh-uh." )
+		end
+
 		return false
 	end
 end
@@ -131,9 +146,27 @@ end
 function entity.die( e )
 	assert( type( e ) == "table" )
 
+	message.push( e.name .. " has died." )
+
 	log.file:write( "[die] Entity " .. tostring( e ) .. " has passed away.\n" )
 
 	e.hp = 0
 	e.active = false
+
+	if e == game.player then
+		game.running = false
+	end
 end
 
+function entity.dumbAI( e )
+	local dir = {
+		{ -1,  0 },
+		{  1,  0 },
+		{  0, -1 },
+		{  0,  1 }
+	}
+
+	local d = dir[ math.random( 1, 4 ) ]
+
+	return entity.moveRelative( e, d[1], d[2] )
+end

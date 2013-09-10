@@ -1,4 +1,6 @@
 
+require "lua/log"
+require "lua/message"
 require "lua/tile"
 require "lua/map"
 require "lua/mapgen"
@@ -6,7 +8,6 @@ require "lua/entity"
 require "lua/util"
 require "lua/sight"
 require "lua/ui"
-require "lua/log"
 require "lua/settings"
 
 game = {}
@@ -56,7 +57,7 @@ function game.init()
 	game.running = true
 	log.file:write( "[init] Game now up and running.\n" )
 
-	-- a global turn is one in which all available entities act;
+	-- a global turn is one in which one entity acts;
 	-- a player turn is a turn in which the player executes a single action
 	game.globalTurns = 0
 	game.playerTurns = 0
@@ -112,6 +113,7 @@ function game.handleKey( k )
 	
 	if contains( keymap.quit, k ) then
 		game.running = false
+		return true
 	end
 
 	if contains( keymap.north, k ) then
@@ -145,6 +147,8 @@ function game.handleKey( k )
 	if contains( keymap.southeast, k ) then
 		return entity.moveRelative( game.player, 1, 1 )
 	end
+
+	message.push( "That's not a valid key." )
 
 	return false
 end

@@ -11,8 +11,6 @@
 
 	* inventory system
 
-	* in-game messages, such as "Bump!" etc.
-
 	* somehow separate movement from melee attack?
 
 	* real, useful map generator
