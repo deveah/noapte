@@ -43,6 +43,8 @@ function game.init()
 	game.player.map = m
 	game.player.x = 10
 	game.player.y = 10
+	game.player.hp = 10
+	game.player.maxHp = 10
 	sight.initMap( game.player )
 	log.file:write( "[init] Generated the player: " .. tostring( game.player )
 		.. "\n" )
@@ -146,6 +148,25 @@ function game.handleKey( k )
 
 	if contains( keymap.southeast, k ) then
 		return entity.moveRelative( game.player, 1, 1 )
+	end
+
+	if contains( keymap.meleeAttack, k ) then
+		message.push( "Attack where?" )
+		ui.drawMainScreen()
+
+		local kk = ui.inputDirection()
+		if kk then
+			local e = entity.findByPosition( game.player.map,
+				game.player.x + kk.x, game.player.y + kk.y )
+			if not e then
+				message.push( "There's noone there." )
+				return false
+			end
+
+			return entity.meleeAttack( game.player, e )
+		else
+			return false
+		end
 	end
 
 	message.push( "That's not a valid key." )

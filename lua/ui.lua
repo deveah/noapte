@@ -105,3 +105,41 @@ function ui.centerCameraOnPlayer()
 	ui.camera.y = game.player.y
 end
 
+function ui.inputDirection()
+
+	local k = curses.getch()
+
+	if contains( keymap.north, k ) then
+		return { x = 0, y = -1 }
+	end
+
+	if contains( keymap.south, k ) then
+		return { x = 0, y = 1 }
+	end
+
+	if contains( keymap.west, k ) then
+		return { x = -1, y = 0 }
+	end
+
+	if contains( keymap.east, k ) then
+		return { x = 1, y = 0 }
+	end
+
+	if contains( keymap.northwest, k ) then
+		return { x = -1, y = -1 }
+	end
+
+	if contains( keymap.northeast, k ) then
+		return { x = 1, y = -1 }
+	end
+
+	if contains( keymap.southwest, k ) then
+		return { x = -1, y = 1 }
+	end
+
+	if contains( keymap.southeast, k ) then
+		return { x = 1, y = 1 }
+	end
+
+	return false
+end

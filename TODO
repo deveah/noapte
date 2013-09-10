@@ -2,20 +2,22 @@
 	Noapte TODO list
 	--
 
-	* dungeon memory separated from player's lightmap
+High priority:
 
-	* screen minimum requirements
+	* inventory system
+	* real, useful map generator
+
+Medium priority:
 
 	* action point consumption
 		* different tiles have different moving cost
-
-	* inventory system
-
-	* somehow separate movement from melee attack?
-
-	* real, useful map generator
-	
 	* combat:
 		* natural attacks, ie. "claws" or "kick"
 		* tool-based attacks
+	
+Low priority:
+
+	* dungeon memory separated from player's lightmap
+	* screen minimum requirements
+	* should message.push also trigger a screen refresh?
 	

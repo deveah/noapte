@@ -94,14 +94,11 @@ function entity.moveRelative( e, x, y )
 				return true
 			else
 				log.file:write( "[moveRelative] Entity " .. tostring( e ) ..
-					" has tried to attack entity " .. tostring( ee ) .. "\n" )
-			
-				--[[if e == game.player then
-					message.push( "You attack " .. ee.name .. "." )
-					entity.die( ee )
-				end]]--
-				message.push( e.name .. " attacks " .. ee.name .. "." )
-				entity.die( ee )
+					" has bumped into entity " .. tostring( ee ) )
+
+				if e == game.player then
+					message.push( "You bump into " .. ee.name .. "." )
+				end
 			end
 		else
 			log.file:write( "[moveRelative] Entity " .. tostring( e ) ..
@@ -154,10 +151,16 @@ function entity.die( e )
 	e.active = false
 
 	if e == game.player then
+		message.push( "You die... Press any key to exit." )
+		ui.drawMainScreen()
+		curses.getch()
+
 		game.running = false
 	end
 end
 
+-- if near player, attack; else move randomly
+-- that's, like, the definition of DumbAI (TM)
 function entity.dumbAI( e )
 	local dir = {
 		{ -1,  0 },
@@ -168,5 +171,37 @@ function entity.dumbAI( e )
 
 	local d = dir[ math.random( 1, 4 ) ]
 
-	return entity.moveRelative( e, d[1], d[2] )
+	if entity.nearPlayer( e ) then
+		return entity.meleeAttack( e, game.player )
+	else
+		return entity.moveRelative( e, d[1], d[2] )
+	end
 end
+
+function entity.meleeAttack( atk, def )
+	assert( type( atk ) == "table" )
+	assert( type( def ) == "table" )
+
+	log.file:write( "[moveRelative] Entity " .. tostring( atk ) ..
+		" has tried to attack entity " .. tostring( def ) .. "\n" )
+	if atk == game.player then
+		message.push( "You attack " .. def.name .. "." )
+	else
+		message.push( atk.name .. " attacks " .. def.name .. "." )
+	end
+
+	def.hp = def.hp - 1
+	if def.hp <= 0 then
+		entity.die( def )
+	end
+
+	return true
+end
+
+function entity.nearPlayer( e )
+	assert( type( e ) == "table" )
+
+	return math.abs( e.x - game.player.x ) <= 1 and
+		math.abs( e.y - game.player.y ) <= 1
+end
+
