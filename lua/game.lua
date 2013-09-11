@@ -33,7 +33,8 @@ function game.init()
 	log.file:write( "[init] Seed: " .. seed .. "\n" )
 
 	-- create map
-	local m = mapgen.dummy( game.defaultMapWidth, game.defaultMapHeight )
+	--local m = mapgen.dummy( game.defaultMapWidth, game.defaultMapHeight )
+	local m = mapgen.formScatter( game.defaultMapWidth, game.defaultMapHeight )
 	table.insert( game.map, m )
 	log.file:write( "[init] Generated dummy map.\n" )
 
@@ -41,8 +42,12 @@ function game.init()
 	game.player = entity.makePlayer( "Player" )
 	table.insert( game.entity, game.player )
 	game.player.map = m
-	game.player.x = 10
-	game.player.y = 10
+	
+	repeat
+		game.player.x = math.random( 1, m.width )
+		game.player.y = math.random( 1, m.height )
+	until m.terrain[game.player.x][game.player.y] == tile.floor
+
 	game.player.hp = 10
 	game.player.maxHp = 10
 	sight.initMap( game.player )
@@ -169,6 +174,18 @@ function game.handleKey( k )
 		end
 	end
 
+	if contains( keymap.debugShowMap, k ) then
+		for i = 1, game.player.map.width do
+			for j = 1, game.player.map.height do
+				if game.player.sightMap[i][j] ~= sight.lit then
+					game.player.sightMap[i][j] = sight.seen
+				end
+			end
+		end
+
+		return false
+	end
+
 	message.push( "That's not a valid key." )
 
 	return false
@@ -186,8 +203,11 @@ function game.makeRandomEntities( n )
 		e.ap = 0
 
 		e.map = game.player.map
-		e.x = math.random( 1, game.player.map.width )
-		e.y = math.random( 1, game.player.map.height )
+
+		repeat
+			e.x = math.random( 1, game.player.map.width )
+			e.y = math.random( 1, game.player.map.height )
+		until game.player.map.terrain[e.x][e.y] == tile.floor
 
 		e.active = true
 

@@ -12,6 +12,8 @@ keymap.southwest =		{ 'b', '1' }
 keymap.southeast =		{ 'n', '3' }
 keymap.meleeAttack =	{ 'z' }
 
+keymap.debugShowMap =	{ 'm' }
+
 misc = {}
 
 misc.logging = true
