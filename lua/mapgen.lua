@@ -63,6 +63,11 @@ function mapgen.rectCost( m, x, y, w, h )
 		end
 	end
 
+	if map.isLegalStrict( m, x, y ) then if m.terrain[x][y] == tile.floor then r = r - 1 end end
+	if map.isLegalStrict( m, x+w, y ) then if m.terrain[x+w][y] == tile.floor then r = r - 1 end end
+	if map.isLegalStrict( m, x, y+h ) then if m.terrain[x][y+h] == tile.floor then r = r - 1 end end
+	if map.isLegalStrict( m, x+w, y+h ) then if m.terrain[x+w][y+h] == tile.floor then r = r - 1 end end
+
 	return r
 end
 
