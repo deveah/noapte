@@ -172,30 +172,10 @@ function entity.dumbAI( e )
 	local d = dir[ math.random( 1, 4 ) ]
 
 	if entity.nearPlayer( e ) then
-		return entity.meleeAttack( e, game.player )
+		return combat.meleeAttack( e, game.player )
 	else
 		return entity.moveRelative( e, d[1], d[2] )
 	end
-end
-
-function entity.meleeAttack( atk, def )
-	assert( type( atk ) == "table" )
-	assert( type( def ) == "table" )
-
-	log.file:write( "[moveRelative] Entity " .. tostring( atk ) ..
-		" has tried to attack entity " .. tostring( def ) .. "\n" )
-	if atk == game.player then
-		message.push( "You attack " .. def.name .. "." )
-	else
-		message.push( atk.name .. " attacks " .. def.name .. "." )
-	end
-
-	def.hp = def.hp - 1
-	if def.hp <= 0 then
-		entity.die( def )
-	end
-
-	return true
 end
 
 function entity.nearPlayer( e )

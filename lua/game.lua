@@ -5,6 +5,7 @@ require "lua/tile"
 require "lua/map"
 require "lua/mapgen"
 require "lua/entity"
+require "lua/combat"
 require "lua/util"
 require "lua/sight"
 require "lua/ui"
@@ -168,7 +169,7 @@ function game.handleKey( k )
 				return false
 			end
 
-			return entity.meleeAttack( game.player, e )
+			return combat.meleeAttack( game.player, e )
 		else
 			return false
 		end
