@@ -6,6 +6,9 @@ High priority:
 
 	* inventory system
 	* outdoor map generator
+	* ui.drawMainScreen() is far too complex
+		* on every tile, there is a check for entities and objects
+		* should be separate loops: tile -> object -> entity
 
 Medium priority:
 

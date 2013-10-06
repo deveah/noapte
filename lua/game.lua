@@ -5,6 +5,7 @@ require "lua/tile"
 require "lua/map"
 require "lua/mapgen"
 require "lua/entity"
+require "lua/object"
 require "lua/combat"
 require "lua/util"
 require "lua/sight"
@@ -57,6 +58,9 @@ function game.init()
 
 	-- create some dumb entities
 	game.makeRandomEntities( 10 )
+
+	-- create some random objects
+	game.makeRandomObjects( 300 )
 
 	-- create the interface
 	ui.init()
@@ -175,6 +179,10 @@ function game.handleKey( k )
 		end
 	end
 
+	if contains( keymap.listInventory, k ) then
+		ui.listInventory()
+	end
+
 	if contains( keymap.debugShowMap, k ) then
 		for i = 1, game.player.map.width do
 			for j = 1, game.player.map.height do
@@ -215,6 +223,28 @@ function game.makeRandomEntities( n )
 		log.file:write( "[makeRandomEntities] Made entity " .. tostring( e )
 			.. ".\n" )
 		table.insert( game.entity, e )
+	end
+end
+
+function game.makeRandomObjects( n )
+	assert( type( n ) == "number" )
+
+	for i = 1, n do
+		local o = clone( object.proto )
+		o.name = "Jellybean sauce"
+		o.face = "*"
+		o.color = curses.magenta
+
+		o.map = game.player.map
+
+		repeat
+			o.x = math.random( 1, game.player.map.width )
+			o.y = math.random( 1, game.player.map.height )
+		until game.player.map.terrain[o.x][o.y] == tile.floor
+
+		log.file:write( "[makeRandomObjects] Made object " .. tostring( o )
+			.. ".\n" )
+		table.insert( game.object, o )
 	end
 end
 

@@ -11,6 +11,7 @@ keymap.northeast =		{ 'u', '9' }
 keymap.southwest =		{ 'b', '1' }
 keymap.southeast =		{ 'n', '3' }
 keymap.meleeAttack =	{ 'z' }
+keymap.listInventory =	{ 'i' }
 
 keymap.debugShowMap =	{ 'm' }
 

@@ -29,9 +29,15 @@ function ui.drawMainScreen()
 
 			if map.isLegal( game.player.map, ax, ay ) then
 				local e = entity.findByPosition( game.player.map, ax, ay )
+				local o = object.findByPosition( game.player.map, ax, ay )
+				
 				if e and e.active and game.player.sightMap[ax][ay] == sight.lit then
 					curses.attr( e.color )
 					curses.write( i, j, e.face )
+				elseif o and game.player.sightMap[ax][ay] == sight.lit then
+					-- only the topmost object is drawn
+					curses.attr( o[1].color )
+					curses.write( i, j, o[1].face )
 				else
 					if game.player.sightMap[ax][ay] == sight.lit then
 						curses.attr( game.player.map.terrain[ax][ay].color )
@@ -143,3 +149,12 @@ function ui.inputDirection()
 
 	return false
 end
+
+function ui.listInventory()
+	for i = 1, #game.player.inventory do
+		curses.write( 0, i, game.player.inventory[i].name )
+	end
+
+	curses.getch()
+end
+
