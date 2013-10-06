@@ -28,30 +28,38 @@ function ui.drawMainScreen()
 			local ay = j + ui.camera.y - math.floor( ui.rows/2 )
 
 			if map.isLegal( game.player.map, ax, ay ) then
-				local e = entity.findByPosition( game.player.map, ax, ay )
-				local o = object.findByPosition( game.player.map, ax, ay )
-				
-				if e and e.active and game.player.sightMap[ax][ay] == sight.lit then
-					curses.attr( e.color )
-					curses.write( i, j, e.face )
-				elseif o and game.player.sightMap[ax][ay] == sight.lit then
-					-- only the topmost object is drawn
-					curses.attr( o[1].color )
-					curses.write( i, j, o[1].face )
+				if game.player.sightMap[ax][ay] == sight.lit then
+					curses.attr( game.player.map.terrain[ax][ay].color )
+					curses.write( i, j, game.player.map.terrain[ax][ay].face )
+				elseif game.player.sightMap[ax][ay] == sight.seen then
+					curses.attr( curses.blue )
+					curses.write( i, j, game.player.map.terrain[ax][ay].face )
 				else
-					if game.player.sightMap[ax][ay] == sight.lit then
-						curses.attr( game.player.map.terrain[ax][ay].color )
-						curses.write( i, j, game.player.map.terrain[ax][ay].face )
-					elseif game.player.sightMap[ax][ay] == sight.seen then
-						curses.attr( curses.blue )
-						curses.write( i, j, game.player.map.terrain[ax][ay].face )
-					else
-						curses.write( i, j, " " )
-					end
+					curses.write( i, j, " " )
 				end
 			else
 				curses.write( i, j, " " )
 			end
+		end
+	end
+
+	for i = 1, #game.object do
+		local o = game.object[i]
+		if	ui.isInViewRange( o.x, o.y ) and
+			game.player.sightMap[o.x][o.y] == sight.lit then
+			curses.attr( o.color )
+			curses.write( o.x + math.floor( ui.cols/2 ) - ui.camera.x,
+				o.y + math.floor( ui.rows/2 ) - ui.camera.y, o.face )
+		end
+	end
+
+	for i = 1, #game.entity do
+		local e = game.entity[i]
+		if	ui.isInViewRange( e.x, e.y ) and e.active and
+			game.player.sightMap[e.x][e.y] == sight.lit then
+			curses.attr( e.color )
+			curses.write( e.x + math.floor( ui.cols/2 ) - ui.camera.x,
+				e.y + math.floor( ui.rows/2 ) - ui.camera.y, e.face )
 		end
 	end
 
@@ -109,6 +117,18 @@ end
 function ui.centerCameraOnPlayer()
 	ui.camera.x = game.player.x
 	ui.camera.y = game.player.y
+end
+
+function ui.isInViewRange( x, y )
+	assert( type( x ) == "number" )
+	assert( type( y ) == "number" )
+
+	local x1 = ui.camera.x - math.floor( ui.cols/2 )
+	local x2 = ui.camera.x + math.floor( ui.cols/2 )
+	local y1 = ui.camera.y - math.floor( ui.rows/2 )
+	local y2 = ui.camera.y + math.floor( ui.rows/2 )
+
+	return x > x1 and x < x2 and y > y1 and y < y2
 end
 
 function ui.inputDirection()
