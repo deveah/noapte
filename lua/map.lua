@@ -9,6 +9,8 @@ map.proto = {
 
 	terrain = {},
 
+	memory = {},
+
 	flags = {}
 }
 
@@ -22,10 +24,14 @@ function map.new( width, height )
 	m.height = height
 
 	m.terrain = {}
+	m.memory = {}
+
 	for i = 1, width do
 		m.terrain[i] = {}
+		m.memory[i] = {}
 		for j = 1, height do
 			m.terrain[i][j] = tile.void
+			m.memory[i][j] = tile.void
 		end
 	end
 
@@ -47,3 +53,4 @@ function map.isLegalStrict( m, x, y )
 
 	return x > 1 and y > 1 and x < m.width and y < m.height
 end
+

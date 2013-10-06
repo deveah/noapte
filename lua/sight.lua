@@ -1,9 +1,6 @@
 
 sight = {}
 
-sight.seen = 1
-sight.lit = 2
-
 function sight.initMap( ent )
 	assert( type( ent ) == "table" )
 
@@ -12,7 +9,7 @@ function sight.initMap( ent )
 	for i = 1, ent.map.width do
 		ent.sightMap[i] = {}
 		for j = 1, ent.map.height do
-			ent.sightMap[i][j] = 0
+			ent.sightMap[i][j] = false
 		end
 	end
 end
@@ -22,9 +19,10 @@ function sight.updateMap( ent )
 
 	for i = 1, ent.map.width do
 		for j = 1, ent.map.height do
-			if ent.sightMap[i][j] == sight.lit then
-				ent.sightMap[i][j] = sight.seen
+			if ent.sightMap[i][j] == true then
+				ent.map.memory[i][j] = ent.map.terrain[i][j]
 			end
+			ent.sightMap[i][j] = false
 		end
 	end
 end
@@ -87,7 +85,7 @@ function sight.updateFOV( ent, radius )
 			if map.isLegal( ent.map, i, j ) then
 				if	dist( ent.x, ent.y, i, j ) <= radius and
 					sight.doRay( ent.map, ent.x, ent.y, i, j ) then
-					ent.sightMap[i][j] = sight.lit
+					ent.sightMap[i][j] = true
 				end
 			end
 		end

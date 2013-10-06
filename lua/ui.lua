@@ -28,12 +28,15 @@ function ui.drawMainScreen()
 			local ay = j + ui.camera.y - math.floor( ui.rows/2 )
 
 			if map.isLegal( game.player.map, ax, ay ) then
-				if game.player.sightMap[ax][ay] == sight.lit then
+				if game.player.sightMap[ax][ay] then
 					curses.attr( game.player.map.terrain[ax][ay].color )
 					curses.write( i, j, game.player.map.terrain[ax][ay].face )
-				elseif game.player.sightMap[ax][ay] == sight.seen then
+				elseif game.player.map.memory[ax][ay] ~= tile.void then
 					curses.attr( curses.blue )
-					curses.write( i, j, game.player.map.terrain[ax][ay].face )
+					curses.write( i, j, game.player.map.memory[ax][ay].face )
+				--elseif game.player.sightMap[ax][ay] == sight.seen then
+				--	curses.attr( curses.blue )
+				--	curses.write( i, j, game.player.map.terrain[ax][ay].face )
 				else
 					curses.write( i, j, " " )
 				end
@@ -46,7 +49,7 @@ function ui.drawMainScreen()
 	for i = 1, #game.object do
 		local o = game.object[i]
 		if	ui.isInViewRange( o.x, o.y ) and
-			game.player.sightMap[o.x][o.y] == sight.lit then
+			game.player.sightMap[o.x][o.y] then
 			curses.attr( o.color )
 			curses.write( o.x + math.floor( ui.cols/2 ) - ui.camera.x,
 				o.y + math.floor( ui.rows/2 ) - ui.camera.y, o.face )
@@ -56,7 +59,7 @@ function ui.drawMainScreen()
 	for i = 1, #game.entity do
 		local e = game.entity[i]
 		if	ui.isInViewRange( e.x, e.y ) and e.active and
-			game.player.sightMap[e.x][e.y] == sight.lit then
+			game.player.sightMap[e.x][e.y] then
 			curses.attr( e.color )
 			curses.write( e.x + math.floor( ui.cols/2 ) - ui.camera.x,
 				e.y + math.floor( ui.rows/2 ) - ui.camera.y, e.face )

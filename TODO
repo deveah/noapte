@@ -6,24 +6,18 @@ High priority:
 
 	* inventory system
 	* outdoor map generator
-	* ui.drawMainScreen() is far too complex
-		* on every tile, there is a check for entities and objects
-		* should be separate loops: tile -> object -> entity
+	* combat:
+		* natural attacks, ie. "claws" or "kick"
+		* tool-based attacks
 
 Medium priority:
 
 	* action point consumption
 		* different tiles have different moving cost
-	* combat:
-		* natural attacks, ie. "claws" or "kick"
-		* tool-based attacks
 	* variety added to map generators
-	* dungeon memory separated from player's lightmap
-		* one lightmap, several maps
-		* every map should have a memory
 
 Low priority:
 
 	* screen minimum requirements
 	* should message.push also trigger a screen refresh?
-	
+
