@@ -1,7 +1,18 @@
 
-#include <luajit-2.0/lua.h>
-#include <luajit-2.0/lualib.h>
-#include <luajit-2.0/lauxlib.h>
+#define NOAPTE_LUAJIT
+/* #define NOAPTE_LUA52 */
+
+#ifdef NOAPTE_LUAJIT
+	#include <luajit-2.0/lua.h>
+	#include <luajit-2.0/lualib.h>
+	#include <luajit-2.0/lauxlib.h>
+#endif
+
+#ifdef NOAPTE_LUA52
+	#include <lua.h>
+	#include <lualib.h>
+	#include <lauxlib.h>
+#endif
 
 #include <curses.h>
 
@@ -177,10 +188,25 @@ luaL_Reg curses[] = {
 
 int main( int argc, char **argv )
 {
-	lua_State *L = lua_open();
+	#ifdef NOAPTE_LUAJIT
+		lua_State *L = lua_open();
+	#endif
+
+	#ifdef NOAPTE_LUA52
+		lua_State *L = luaL_newstate();
+	#endif
+
 	luaL_openlibs( L );
 
-	luaL_register( L, "curses", curses );
+	#ifdef NOAPTE_LUAJIT
+		luaL_register( L, "curses", curses );
+	#endif
+
+	#ifdef NOAPTE_LUA52
+		luaL_newlib( L, curses );
+		lua_setglobal( L, "curses" );
+	#endif
+	
 	init_constants( L );
 
 	int r;
